@@ -145,3 +145,160 @@
     </script>
 </body>
 </html>
+
+
+line-by-line explaination:
+
+<!DOCTYPE html>
+<html lang="en"> <!-- Declares the HTML5 document and sets language to English -->
+<head>
+    <meta charset="UTF-8"> <!-- Sets character encoding to UTF-8 for supporting all characters -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Makes the page responsive on all devices -->
+    <title>HTML5 Video API Demo</title> <!-- Title of the web page shown in browser tab -->
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Sets font style */
+            max-width: 800px; /* Limits width to 800px */
+            margin: 0 auto; /* Centers the content horizontally */
+            padding: 20px; /* Adds padding inside body */
+        }
+        .video-container {
+            margin: 20px 0; /* Adds space above and below the container */
+        }
+        video {
+            width: 100%; /* Makes video stretch to full width of container */
+            background: #000; /* Sets background to black */
+        }
+        .controls {
+            display: flex; /* Uses flexbox for horizontal layout */
+            gap: 10px; /* Adds space between buttons */
+            flex-wrap: wrap; /* Allows buttons to wrap to next line if needed */
+            margin: 10px 0; /* Space above and below controls */
+        }
+        button {
+            padding: 8px 15px; /* Adds padding inside buttons */
+            cursor: pointer; /* Shows pointer on hover */
+        }
+        .time-display {
+            margin: 10px 0; /* Adds vertical margin */
+            font-size: 1.1em; /* Slightly larger text */
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML5 Video API Demonstration</h1> <!-- Main heading -->
+
+    <div class="video-container"> <!-- Container for video and controls -->
+        <!-- Basic video element -->
+        <video id="myVideo" controls> <!-- Video tag with built-in browser controls -->
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            <!-- Specifies video source and format -->
+            Your browser does not support the video tag. <!-- Fallback message for unsupported browsers -->
+        </video>
+
+        <div class="controls"> <!-- Custom control buttons -->
+            <button id="playBtn">Play</button> <!-- Button to play video -->
+            <button id="pauseBtn">Pause</button> <!-- Button to pause video -->
+            <button id="muteBtn">Mute/Unmute</button> <!-- Button to toggle mute -->
+            <button id="jumpBtn">Forward 10s</button> <!-- Button to jump 10 seconds forward -->
+        </div>
+
+        <div class="time-display"> <!-- Area showing current time and total duration -->
+            Current time: <span id="currentTime">0</span> / 
+            Duration: <span id="duration">0</span>
+        </div>
+    </div>
+
+    <script>
+        // Get video element and controls
+        const video = document.getElementById('myVideo'); // Accesses the video element
+        const playBtn = document.getElementById('playBtn'); // Accesses Play button
+        const pauseBtn = document.getElementById('pauseBtn'); // Accesses Pause button
+        const muteBtn = document.getElementById('muteBtn'); // Accesses Mute button
+        const jumpBtn = document.getElementById('jumpBtn'); // Accesses Jump button
+        const currentTimeDisplay = document.getElementById('currentTime'); // Span showing current playback time
+        const durationDisplay = document.getElementById('duration'); // Span showing video duration
+
+        // 1. Basic video element usage
+        /*
+            The <video> element is used to embed video content.
+            Key attributes:
+            - src/source: Specifies video source file(s)
+            - controls: Shows default browser controls
+            - width/height: Sets dimensions
+            - autoplay: Starts playing automatically
+            - loop: Makes video loop
+            - muted: Starts muted
+        */
+        // ⤴️ This comment explains how the video tag works
+
+        // 2. Play/pause buttons
+        playBtn.addEventListener('click', () => {
+            video.play(); // Starts video playback
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            video.pause(); // Pauses video playback
+        });
+
+        /*
+            JavaScript controls video playback through these methods:
+            - play(): Starts playback
+            - pause(): Pauses playback
+            - load(): Reloads the video source
+        */
+        // ⤴️ These methods are built-in and allow JS to control the video
+
+        // 3. Mute/unmute toggle
+        muteBtn.addEventListener('click', () => {
+            video.muted = !video.muted; // Toggles muted state
+            muteBtn.textContent = video.muted ? "Unmute" : "Mute"; // Updates button text accordingly
+        });
+
+        /*
+            The muted property:
+            - Boolean value (true/false)
+            - When true, audio is silenced
+            - Can be set programmatically or via the muted attribute
+        */
+        // ⤴️ This shows how JS can mute or unmute the video
+
+        // 4. Display current playback time
+        video.addEventListener('timeupdate', () => {
+            currentTimeDisplay.textContent = video.currentTime.toFixed(1); // Updates current time with 1 decimal
+            durationDisplay.textContent = video.duration.toFixed(1); // Updates total duration with 1 decimal
+        });
+
+        /*
+            ontimeupdate event:
+            - Fires continuously as the video plays
+            - Useful for updating time displays or progress bars
+            - currentTime property gives current playback position in seconds
+            - duration property gives total video length in seconds
+        */
+        // ⤴️ This keeps the time display updated as the video plays
+
+        // 5. Forward by 10 seconds (modified from original jump to 10s)
+        jumpBtn.addEventListener('click', () => {
+            video.currentTime += 10; // Adds 10 seconds to current time
+            // Ensure we don't go past the video duration
+            if (video.currentTime > video.duration) {
+                video.currentTime = video.duration; // Caps it at max duration
+            }
+        });
+
+        /*
+            Forwarding video time with JavaScript:
+            - currentTime property can be incremented
+            - video.currentTime += 10 moves forward 10 seconds
+            - Should check against video.duration to avoid errors
+        */
+        // ⤴️ This is how custom "forward" functionality is implemented
+
+        // Initialize duration display when metadata loads
+        video.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = video.duration.toFixed(1); // Sets total duration when video metadata is ready
+        });
+    </script>
+</body>
+</html>
